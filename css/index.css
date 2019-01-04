@@ -44,24 +44,17 @@ clearfix {
     line-height:1.5;
     font-size:15px;
 }
-body{
-    background: #64b9d2;
+#wrap{
+    position: relative;
+    height: 100%;
 }
 #header{
     position: relative;
-    height: 80px;
-    width: 100%;
-    background: oldlace;
+    z-index: 100;
 }
 #header .headerMain{
     width: 1100px;
     height:80px;
-    background: palegoldenrod;
-    /*position: absolute;*/
-    /*left: 0;*/
-    /*top: 0;*/
-    /*right: 0;*/
-    /*bottom: 0;*/
     margin:0 auto;
 }
 #header .headerMain h1{
@@ -109,4 +102,34 @@ body{
     background-repeat: no-repeat;
     transition: left 1s;
 }
-
+content{
+    position: absolute;
+    top: 80px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+.content-main{
+    position: absolute;
+    left: 0;
+    top: 0;  /*为了让第一次有过渡效果*/
+    height: 500%;
+    width: 100%;
+    transition: top 1s;
+}
+.content-main>li{
+    position: relative;
+    height: 20%;
+    background: pink;
+}
+.content-main section{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -260px;
+    margin-left: -550px;
+    width: 1100px;
+    height: 520px;
+    background: hotpink;
+}

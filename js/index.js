@@ -16,6 +16,7 @@ window.onload = function (){
 
     // 初始化时小圆点的位置
     // li距离屏幕左边的距离 + li自己宽度的一半 - 三角形自己宽度的一半；
+
     arrowNode.style.left = headerLisNodes[0].getBoundingClientRect().left + headerLisNodes[0].offsetWidth / 2
         - arrowNode.offsetWidth / 2 + 'px';
     headerDownNodes[0].style.width = '100%';
