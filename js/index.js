@@ -1,42 +1,95 @@
-// if (window.addEventListener) {
-//     //DOMContentLoaded时间内：等待dom元素加载完成，就立即触发，触发时机比onload早的多
-//     window.addEventListener('DOMContentLoaded', main)
-// } else {
-//     //onload事件等待所有资源加载完成才会调用
-//     window.onload = main;
-// }
 //等待页面加载（所有资源  图片、音、视频等资源）完成，才会调用此函数
-window.onload = function (){
-    //li
+window.addEventListener('DOMContentLoaded', function () {
+    //获取dom元素
     var headerLisNodes = document.querySelectorAll('.nav li');
-    //箭头
     var arrowNode = document.querySelector('.arrow');
-    //黑色字体
     var headerDownNodes = document.querySelectorAll('.down');
+    var contentUlNode = document.querySelector('.content-main');
+    var contentNode = document.querySelector('.content');
 
-    // 初始化时小圆点的位置
-    // li距离屏幕左边的距离 + li自己宽度的一半 - 三角形自己宽度的一半；
+    var contentHeight = contentNode.offsetHeight;
+    var nowIndex = 0;
 
-    arrowNode.style.left = headerLisNodes[0].getBoundingClientRect().left + headerLisNodes[0].offsetWidth / 2
-        - arrowNode.offsetWidth / 2 + 'px';
-    headerDownNodes[0].style.width = '100%';
+    //处理头部js代码
+    headerHandle();
+    function headerHandle() {
 
-    //获取所有li
-    for (var i = 0; i < headerLisNodes.length; i++) {
-        headerLisNodes[i].index=i;
-        headerLisNodes[i].onclick=function () {
-          //清除所有的蓝色
-            for (var j = 0; j <headerDownNodes.length; j++) {
-                headerDownNodes[j].style.width='';
+        //初始化时小箭头来到第一个li下面
+        arrowNode.style.left = headerLisNodes[0].getBoundingClientRect().left + headerLisNodes[0].offsetWidth / 2
+            - arrowNode.offsetWidth / 2 + 'px';
+        headerDownNodes[0].style.width = '100%';
+
+        for (var i = 0; i < headerLisNodes.length; i++) {
+            headerLisNodes[i].index = i;
+            headerLisNodes[i].onclick = function () {
+                //同步更新nowIndex的值，否则点击后在滚动就会出bug
+                nowIndex = this.index;
+                move(nowIndex);
             }
-            //点那个li，那个li下面的黑色显示
-            headerDownNodes[this.index].style.width = '100%';
-
-            //让小箭头去当前点击的li的下面
-            arrowNode.style.left = this.getBoundingClientRect().left +this.offsetWidth / 2
-                - arrowNode.offsetWidth / 2 + 'px';
-
-
         }
     }
-}
+
+    //公共move函数
+    function move(nowIndex) {
+        //默认清空所有width为0
+        for (var j = 0; j < headerDownNodes.length; j++) {
+            headerDownNodes[j].style.width = '';
+        }
+        //设置当前width为100%
+        headerDownNodes[nowIndex].style.width = '100%';
+        //让小箭头去当前点击的li的下面
+        arrowNode.style.left = headerLisNodes[nowIndex].getBoundingClientRect().left + headerLisNodes[nowIndex].offsetWidth / 2
+            - arrowNode.offsetWidth / 2 + 'px';
+        //让内容区ul运动
+        contentUlNode.style.top = - nowIndex * contentHeight + 'px';
+    }
+
+    //内容区js代码
+    contentHandle();
+    function contentHandle() {
+        //滚轮事件
+        document.onmousewheel = wheel;
+        document.addEventListener('DOMMouseScroll', wheel);
+
+        function wheel(event) {
+            event = event || window.event;
+
+            var flag = '';
+            if (event.wheelDelta) {
+                //ie/chrome
+                if (event.wheelDelta > 0) {
+                    flag = 'up';
+                } else {
+                    flag = 'down'
+                }
+            } else if (event.detail) {
+                //firefox
+                if (event.detail < 0) {
+                    flag = 'up';
+                } else {
+                    flag = 'down'
+                }
+            }
+
+            switch (flag) {
+                case 'up' :
+                    if (nowIndex > 0) {
+                        nowIndex--;
+                        move(nowIndex);
+                    }
+                    break;
+                case 'down' :
+                    if (nowIndex < 4) {
+                        nowIndex++;
+                        move(nowIndex);
+                    }
+                    break;
+            }
+
+            //禁止默认行为
+            event.preventDefault && event.preventDefault();
+            return false;
+        }
+    }
+
+})
