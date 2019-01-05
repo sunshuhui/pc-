@@ -50,7 +50,7 @@ clearfix {
 }
 #header{
     position: relative;
-    z-index: 100;
+    /*z-index: 100;*/
 }
 #header .headerMain{
     width: 1100px;
@@ -102,23 +102,24 @@ clearfix {
     background-repeat: no-repeat;
     transition: left 1s;
 }
-content{
+.content{
     position: absolute;
     top: 80px;
     bottom: 0;
     left: 0;
     right: 0;
     overflow: hidden;
+    background: #95dc84;
 }
 .content-main{
     position: absolute;
     left: 0;
-    top: 0;  /*为了让第一次有过渡效果*/
+    top: 0;
     height: 500%;
     width: 100%;
     transition: top 1s;
 }
-.content-main>li{
+.content-main li{
     position: relative;
     height: 20%;
     background: pink;
